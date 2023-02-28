@@ -1,6 +1,8 @@
 package com.alex.sid.shante.locationbasedsocialnetwork.presentation.screens.map
 
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,6 +27,7 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 
+@RequiresApi(Build.VERSION_CODES.Q)
 @Composable
 fun MapScreen(
     modifier: Modifier = Modifier
@@ -35,7 +38,10 @@ fun MapScreen(
     Box(
         modifier = modifier.fillMaxSize()
     ) {
-        Map(state.coordinatesOfCenter)
+        Map(
+            focusCoordinates = state.focusCoordinates,
+            currentPositionCoordinates = state.currentPosition
+        )
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -56,7 +62,7 @@ fun MapScreen(
                 ) {
                     items(state.hintsForRequest) { it ->
                         AddressHint(address = it) {
-                            viewModel.findPlace(
+                            viewModel.scrollToCoordinates(
                                 Coordinates(
                                     latitude = it.geometry.coordinates[1],
                                     longitude = it.geometry.coordinates[0]
@@ -104,6 +110,7 @@ fun addMarker(view: MapView, coordinates: Pair<Int, Int>, context: Context) {
 }
 
 
+@RequiresApi(Build.VERSION_CODES.Q)
 @Preview(showBackground = true)
 @Composable
 fun MapScreenPreview() {

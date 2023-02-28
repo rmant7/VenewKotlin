@@ -1,5 +1,7 @@
 package com.alex.sid.shante.locationbasedsocialnetwork.presentation.screens.map
 
+import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alex.sid.shante.locationbasedsocialnetwork.di.IoDispatcher
@@ -24,8 +26,10 @@ class MapViewModel @Inject constructor(
 
     init {
         _state.value = MapState(
-            coordinatesOfCenter = Coordinates(latitude = 15.8700, longitude = 100.9925),
-            userInput = ""
+            focusCoordinates = STARTING_COORDINATES,
+            currentPosition = STARTING_COORDINATES,
+            userInput = "",
+            isPlaceFound = false
         )
     }
 
@@ -41,9 +45,26 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    fun findPlace(coordinates: Coordinates) {
+    fun scrollToCoordinates(coordinates: Coordinates) {
         _state.update {
-            it.copy(coordinatesOfCenter = coordinates, isPlaceFound = true, hintsForRequest = emptyList())
+            if (coordinates !== STARTING_COORDINATES) {
+                it.copy(
+                    focusCoordinates = coordinates,
+                    isPlaceFound = true,
+                    hintsForRequest = emptyList()
+                )
+            } else it
+        }
+    }
+
+    fun setCurrentPosition(coordinates: Coordinates) {
+        _state.update {
+            if (coordinates !== STARTING_COORDINATES) {
+                it.copy(
+                    currentPosition = coordinates,
+                    hintsForRequest = emptyList()
+                )
+            } else it
         }
     }
 
@@ -51,7 +72,6 @@ class MapViewModel @Inject constructor(
         viewModelScope.launch(dispatcher) {
             try {
                 val place = repository.getPlaceByRequest(request = input)
-                println(place)
                 _state.update { state -> state.copy(hintsForRequest = place.features) }
             } catch (error: Throwable) {
                 println(error.message)
@@ -59,4 +79,13 @@ class MapViewModel @Inject constructor(
         }
     }
 
+    fun changeZoomLevel(zoomValue: Double) {
+        _state.update {
+            it.copy(zoomLevel = zoomValue)
+        }
+    }
+
+    fun showToast(context: Context, message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
 }
