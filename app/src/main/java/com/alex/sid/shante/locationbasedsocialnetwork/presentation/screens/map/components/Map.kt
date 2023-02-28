@@ -12,20 +12,22 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.FloatingActionButtonDefaults
 import androidx.compose.material.Icon
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.alex.sid.shante.locationbasedsocialnetwork.R
 import com.alex.sid.shante.locationbasedsocialnetwork.presentation.screens.map.Coordinates
 import com.alex.sid.shante.locationbasedsocialnetwork.presentation.screens.map.MapViewModel
 import com.alex.sid.shante.locationbasedsocialnetwork.presentation.screens.map.STARTING_COORDINATES
@@ -152,12 +154,14 @@ fun Map(
                     viewModel.changeZoomLevel(STARTING_ZOOM_LEVEL)
                 }
             },
+            backgroundColor = Color.White,
+            elevation = FloatingActionButtonDefaults.elevation(8.dp),
             modifier = modifier
                 .align(alignment = Alignment.BottomEnd)
-                .padding(end = 40.dp, bottom = 60.dp)
+                .padding(end = 40.dp, bottom = 80.dp)
         ) {
             Icon(
-                imageVector = Icons.Default.LocationOn,
+                painter = painterResource(id = R.drawable.ic_navigation_arrow),
                 contentDescription = "Navigation"
             )
         }

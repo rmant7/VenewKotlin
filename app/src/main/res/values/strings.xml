@@ -1,6 +1,5 @@
 <resources>
-    <string name="app_name">LocationBasedSocialNetwork</string>
+    <string name="app_name">Venew</string>
 
     <string name="address">Address</string>
-
 </resources>
